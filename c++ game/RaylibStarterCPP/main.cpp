@@ -50,7 +50,11 @@ bool OnUserCreate()
 
         for (int i = 0; i < a.nSize; i++)
         {
+<<<<<<< HEAD
             //yea back to working
+=======
+            //ecn yea more testing
+>>>>>>> Testing
         }
     }
 
