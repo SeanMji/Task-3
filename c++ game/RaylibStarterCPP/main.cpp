@@ -21,76 +21,181 @@
 
 #include "raylib.h"
 
-#define RAYGUI_IMPLEMENTATION
-#define RAYGUI_SUPPORT_ICONS
-#include "raygui.h"
-#include <vector>
+#include <math.h>
 using namespace std;
 
-struct GameObject
+typedef struct Meteor
 {
-    float x;
-    float y;
-    float dx;
-    float dy;
-    int nSize;
+    Vector2 position;
+    Vector2 speed;
+    float radius;
+    bool active;
+    Color color;
 };
 
-vector <GameObject> vecAsteroids;
 
-bool OnUserCreate()
+const int maxMeteor = 4;
+static Meteor meteor[maxMeteor];
+static bool victory = false;
+int screenWidth = 1280;
+int screenHeight = 720;
+static float shipHeight = 0;
+static float meteorSpeed = 2;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void DrawGame(void)
 {
-    vecAsteroids.push_back({ 20, 20, 8, -6, (int)16 });
+    BeginDrawing();
 
-    //update and draw asteroids
-    for (auto &a : vecAsteroids)
+    
+
+    ClearBackground(RAYWHITE);
+
+    for (int i = 0; i < maxMeteor; i++)
     {
-        a.x += a.dx * GetFrameTime();
-        a.y += a.dy * GetFrameTime();
-
-        for (int i = 0; i < a.nSize; i++)
-        {
-<<<<<<< HEAD
-            //yea back to working
-=======
-            //ecn yea more testing
->>>>>>> Testing
-        }
+        if (meteor[i].active) DrawCircleV(meteor[i].position, meteor[i].radius, DARKGRAY);
+        else DrawCircleV(meteor[i].position, meteor[i].radius, Fade(LIGHTGRAY, 0.3f));
     }
 
-
-        return true;
+    EndDrawing();
 }
 
+void UpdateGame(void)
+{
+    for (int i = 0; i < maxMeteor; i++)
+    {
+        if (meteor[i].active)
+        {
+            meteor[i].position.x += meteor[i].speed.x;
+            meteor[i].position.y += meteor[i].speed.y;
+
+            if (meteor[i].position.x > screenWidth + meteor[i].radius)
+            {
+                meteor[i].position.x = -(meteor[i].radius);
+            }
+            else if (meteor[i].position.x < 0 - meteor[i].radius)
+            {
+                meteor[i].position.x = screenWidth + (meteor[i].radius);
+            }
+            if (meteor[i].position.y > screenHeight + meteor[i].radius)
+            {
+                meteor[i].position.y = -(meteor[i].radius);
+            }
+            else if (meteor[i].position.y < 0 - meteor[i].radius)
+            {
+                meteor[i].position.y = screenHeight + (meteor[i].radius);
+            }
+        }
+    }
+}
+
+void UpdateDrawFrame(void)
+{
+    UpdateGame();
+    DrawGame();
+}
+
+void InitGame(void)
+{
+    float posx, posy;
+    float velx, vely;
+    bool correctRange = false;
+    victory = false;
+
+    shipHeight = (20.0f / 2) / tanf(20 * DEG2RAD);
+
+
+    for (int i = 0; i < maxMeteor; i++)
+    {
+        posx = GetRandomValue(0, screenWidth);
+
+        while (!correctRange)
+        {
+            if (posx > screenWidth / 2 - 150 && posx < screenWidth / 2 + 150)
+            {
+                posx = GetRandomValue(0, screenWidth);
+
+            }
+            else
+            {
+                correctRange = true;
+            }
+        }
+        correctRange = false;
+
+        posy = GetRandomValue(0, screenHeight);
+
+        while (!correctRange)
+        {
+            if (posy > screenHeight / 2 - 150 && posy < screenHeight / 2 + 150)  posy = GetRandomValue(0, screenHeight);
+            else correctRange = true;
+        }
+
+        meteor[i].position = { posx, posy };
+
+        correctRange = false;
+
+        velx = GetRandomValue(-meteorSpeed, meteorSpeed);
+        vely = GetRandomValue(-meteorSpeed, meteorSpeed);
+
+        while (!correctRange)
+        {
+            if (velx == 0 && vely == 0)
+            {
+
+                velx = GetRandomValue(-meteorSpeed, meteorSpeed);
+                vely = GetRandomValue(-meteorSpeed, meteorSpeed);
+            }
+            else correctRange = true;
+        }
+
+        meteor[i].speed = { velx, vely };
+        meteor[i].radius = 40;
+        meteor[i].active = true;
+        meteor[i].color = GRAY;
+        
+    }
+}
 
 int main(int argc, char* argv[])
 {
-    
-    int screenWidth = 800;
-    int screenHeight = 450;
+
+
 
     InitWindow(screenWidth, screenHeight, "asteroid");
 
     SetTargetFPS(60);
-    
 
-    
-    while (!WindowShouldClose())    
+    InitGame();
+
+    while (!WindowShouldClose())
     {
-      
-        BeginDrawing();
 
-        ClearBackground(RAYWHITE);
+       
 
+              
+
+        UpdateDrawFrame();
         
 
-        EndDrawing();
-        
     }
 
-     
-    CloseWindow();        
-   
+
+    CloseWindow();
+
 
     return 0;
 }
