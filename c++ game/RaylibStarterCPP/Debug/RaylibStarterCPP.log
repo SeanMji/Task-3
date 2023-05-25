@@ -1,19 +1,35 @@
 ﻿  main.cpp
-C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(34,2): warning C4091: 'typedef ': ignored on left of 'Meteor' when no variable is declared
-C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(123,30): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(129,38): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(139,30): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(143,103): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(151,45): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(151,31): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(151,30): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(152,45): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(152,31): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(152,30): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(159,53): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(159,39): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(159,38): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(160,53): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(160,39): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(160,38): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(39,2): warning C4091: 'typedef ': ignored on left of 'Spaceship' when no variable is declared
+C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(50,2): warning C4091: 'typedef ': ignored on left of 'Meteor' when no variable is declared
+C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(61,2): warning C4091: 'typedef ': ignored on left of 'Bullets' when no variable is declared
+C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(151,76): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(152,76): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(293,121): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(300,104): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(307,104): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(430,82): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(435,88): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(440,92): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(486,34): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(486,30): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(492,42): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(492,38): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(502,34): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(502,30): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(506,107): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(506,103): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(514,45): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(514,31): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(514,30): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(515,45): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(515,31): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(515,30): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(522,53): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(522,39): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(522,38): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(523,53): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(523,39): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(523,38): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(566,29): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\s211054\Desktop\asteroidrep\c++ game\RaylibStarterCPP\main.cpp(566,16): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
   RaylibStarterCPP.vcxproj -> C:\Users\s211054\Desktop\asteroidrep\c++ game\bin\Win32\Debug\RaylibStarterCPP.exe
