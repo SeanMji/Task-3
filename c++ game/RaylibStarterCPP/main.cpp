@@ -39,6 +39,16 @@ typedef struct Spaceship
 
 };
 
+typedef struct Saucer
+{
+    Vector2 position;
+    Vector2 speed;
+    Vector2 size;
+    float rotation;
+    Color color;
+    bool active;
+};
+
 
 
 typedef struct Meteor
@@ -61,9 +71,22 @@ typedef struct Bullets
     Color color;
 };
 
+typedef struct EnemyBullets
+{
+    Vector2 position;
+    Vector2 speed;
+    float radius;
+    float rotation;
+    int lifeSpawn;
+    bool active;
+    Color color;
+};
+
 
 const int maxShooting = 5;
+const int maxEnemShooting = 1;
 static Bullets shooting[maxShooting];
+static EnemyBullets enemshooting[maxShooting];
 static Spaceship player;
 static int maxMeteor = 4;
 static int maxMedMeteor = 8;
@@ -71,6 +94,7 @@ static int maxSmallMeteor = 16;
 static Meteor* meteor = new Meteor[maxMeteor];
 static Meteor* meteorMed = new Meteor[maxMedMeteor];
 static Meteor* meteorSmall = new Meteor[maxSmallMeteor];
+static Saucer saucer;
 static bool victory = false;
 float screenWidth = 1280;
 float screenHeight = 720;
@@ -83,8 +107,9 @@ static int midMeteorsCount;
 static int smallMeteorsCount;
 static bool restart = false;
 static bool nextRound = false;
+int sauceraccelerate = 10;
 int lives = 3;
-
+Vector2 waypoint;
 
 
 
@@ -93,6 +118,14 @@ void InitGame()
     float posx, posy;
     float velx, vely;
     bool correctRange = false;
+
+
+    saucer.position = { screenWidth / 8, screenHeight / 2 };
+    saucer.speed = { 0,0 };
+    saucer.size = { 50,25 };
+    saucer.active = true;
+    saucer.color = BLUE;
+
 
 
 
@@ -114,6 +147,17 @@ void InitGame()
         shooting[i].lifeSpawn = 0;
         shooting[i].color = RED;
     }
+
+    for (int i = 0; i < maxEnemShooting; i++)
+    {
+        enemshooting[i].position = { 0, 0 };
+        enemshooting[i].speed = { 0, 0 };
+        enemshooting[i].radius = 2;
+        enemshooting[i].active = false;
+        enemshooting[i].lifeSpawn = 0;
+        enemshooting[i].color = RED;
+    }
+
 
 
     for (int i = 0; i < maxMeteor; i++)
@@ -240,6 +284,39 @@ void UpdateGame(void)
             player.position.y = screenHeight + shipHeight;
         }
 
+        if (saucer.active)
+        {
+
+            saucer.speed.x = 1;
+            if (saucer.position.x > screenWidth + saucer.size.x)
+            {
+                sauceraccelerate = GetRandomValue(-8, -12);
+                saucer.position.y = screenHeight / GetRandomValue(2, 10);
+            }
+            else if (saucer.position.x < saucer.size.x * -5)
+            {
+                sauceraccelerate = GetRandomValue(8, 12);
+                saucer.position.y = screenHeight / GetRandomValue(-2, 10);
+            }
+            saucer.position.x += saucer.speed.x * sauceraccelerate;
+            for (int i = 0; i < maxEnemShooting; i++)
+            {
+                if (enemshooting[i].active == false)
+                {
+                    enemshooting[i].position = { saucer.position.x , saucer.position.y };
+                    enemshooting[i].active = true;
+                    enemshooting[i].speed.x = 1.5 * sin(saucer.rotation * DEG2RAD) * acceleration;
+                    enemshooting[i].speed.y = 1.5 * cos(saucer.rotation * DEG2RAD) * acceleration;
+                    enemshooting[i].rotation = player.position.x;
+                    break;
+                }
+            }
+        }
+
+
+
+
+
 
         if (IsKeyPressed(KEY_SPACE))
         {
@@ -259,6 +336,10 @@ void UpdateGame(void)
         for (int i = 0; i < maxShooting; i++)
         {
             if (shooting[i].active) shooting[i].lifeSpawn++;
+        }
+        for (int i = 0; i < maxEnemShooting; i++)
+        {
+            if (enemshooting[i].active) enemshooting[i].lifeSpawn++;
         }
 
         for (int i = 0; i < maxShooting; i++)
@@ -300,7 +381,45 @@ void UpdateGame(void)
                 }
             }
         }
+        for (int i = 0; i < maxEnemShooting; i++)
+        {
+            if (enemshooting[i].active)
+            {
 
+                enemshooting[i].position.x += enemshooting[i].speed.x;
+                enemshooting[i].position.y -= enemshooting[i].speed.y;
+
+
+                if (enemshooting[i].position.x > screenWidth + enemshooting[i].radius)
+                {
+                    enemshooting[i].active = false;
+                    enemshooting[i].lifeSpawn = 0;
+                }
+                else if (enemshooting[i].position.x < 0 - enemshooting[i].radius)
+                {
+                    shooting[i].active = false;
+                    shooting[i].lifeSpawn = 0;
+                }
+                if (enemshooting[i].position.y > screenHeight + enemshooting[i].radius)
+                {
+                    shooting[i].active = false;
+                    shooting[i].lifeSpawn = 0;
+                }
+                else if (enemshooting[i].position.y < 0 - enemshooting[i].radius)
+                {
+                    enemshooting[i].active = false;
+                    enemshooting[i].lifeSpawn = 0;
+                }
+
+                if (enemshooting[i].lifeSpawn >= 30)
+                {
+                    enemshooting[i].position = { 0, 0 };
+                    enemshooting[i].speed = { 0, 0 };
+                    enemshooting[i].lifeSpawn = 0;
+                    enemshooting[i].active = false;
+                }
+            }
+        }
 
 
 
@@ -504,9 +623,9 @@ void UpdateGame(void)
             lives -= 1;
             if (lives == 0)
             {
-                maxMeteor = 1;
-                maxMedMeteor = 2;
-                maxSmallMeteor = 4;
+                maxMeteor = 4;
+                maxMedMeteor = 8;
+                maxSmallMeteor = 16;
                 lives = 3;
             }
 
@@ -570,28 +689,7 @@ void DrawGame()
     ClearBackground(RAYWHITE);
 
 
-    if (lives > 0)
-    {
-        DrawText(to_string(lives).c_str(), screenWidth / 15, screenHeight / 10, 25, RED);
-        DrawText("lives: ", screenWidth / 120, screenHeight / 10, 25, RED);
-    }
-    if (player.active)
-    {
-        Vector2 v1 = { player.position.x + sinf(player.rotation * DEG2RAD) * (shipHeight), player.position.y - cosf(player.rotation * DEG2RAD) * (shipHeight) };
-        Vector2 v2 = { player.position.x - cosf(player.rotation * DEG2RAD) * (playerSize / 2), player.position.y - sinf(player.rotation * DEG2RAD) * (playerSize / 2) };
-        Vector2 v3 = { player.position.x + cosf(player.rotation * DEG2RAD) * (playerSize / 2), player.position.y + sinf(player.rotation * DEG2RAD) * (playerSize / 2) };
-        DrawTriangle(v1, v2, v3, RED);
-    }
-    else
-    {
-        Vector2 v1 = { player.position.x + sinf(player.rotation * DEG2RAD) * (shipHeight), player.position.y - cosf(player.rotation * DEG2RAD) * (shipHeight) };
-        Vector2 v2 = { player.position.x - cosf(player.rotation * DEG2RAD) * (playerSize / 2), player.position.y - sinf(player.rotation * DEG2RAD) * (playerSize / 2) };
-        Vector2 v3 = { player.position.x + cosf(player.rotation * DEG2RAD) * (playerSize / 2), player.position.y + sinf(player.rotation * DEG2RAD) * (playerSize / 2) };
-        DrawTriangle(v1, v2, v3, Fade(RAYWHITE, 0.1));
-        shooting->active = false;
-        DrawText("YOU LOSE!!", screenWidth / 2 - 250, screenHeight / 2, 100, RED);
-        DrawText("Press r to restart", screenWidth / 2 - 250, screenHeight / 1.25f, 50, RED);
-    }
+
 
 
     for (int i = 0; i < maxMeteor; i++)
@@ -632,6 +730,10 @@ void DrawGame()
     {
         if (shooting[i].active) DrawCircleV(shooting[i].position, shooting[i].radius, RED);
     }
+    for (int i = 0; i < maxEnemShooting; i++)
+    {
+        if (enemshooting[i].active) DrawCircleV(enemshooting[i].position, enemshooting[i].radius, RED);
+    }
 
     if (victory == true)
     {
@@ -643,7 +745,33 @@ void DrawGame()
         DrawText("", screenWidth / 2 - 450, screenHeight / 2, 100, RED);
     }
 
+    if (player.active)
+    {
+        Vector2 v1 = { player.position.x + sinf(player.rotation * DEG2RAD) * (shipHeight), player.position.y - cosf(player.rotation * DEG2RAD) * (shipHeight) };
+        Vector2 v2 = { player.position.x - cosf(player.rotation * DEG2RAD) * (playerSize / 2), player.position.y - sinf(player.rotation * DEG2RAD) * (playerSize / 2) };
+        Vector2 v3 = { player.position.x + cosf(player.rotation * DEG2RAD) * (playerSize / 2), player.position.y + sinf(player.rotation * DEG2RAD) * (playerSize / 2) };
+        DrawTriangle(v1, v2, v3, RED);
+    }
+    else
+    {
+        Vector2 v1 = { player.position.x + sinf(player.rotation * DEG2RAD) * (shipHeight), player.position.y - cosf(player.rotation * DEG2RAD) * (shipHeight) };
+        Vector2 v2 = { player.position.x - cosf(player.rotation * DEG2RAD) * (playerSize / 2), player.position.y - sinf(player.rotation * DEG2RAD) * (playerSize / 2) };
+        Vector2 v3 = { player.position.x + cosf(player.rotation * DEG2RAD) * (playerSize / 2), player.position.y + sinf(player.rotation * DEG2RAD) * (playerSize / 2) };
+        DrawTriangle(v1, v2, v3, Fade(RAYWHITE, 0.1));
+        shooting->active = false;
+        DrawText("YOU LOSE!!", screenWidth / 2 - 250, screenHeight / 2, 100, RED);
+        DrawText("Press r to restart", screenWidth / 2 - 250, screenHeight / 1.25f, 50, RED);
+    }
 
+    if (lives > 0)
+    {
+        DrawText(to_string(lives).c_str(), screenWidth / 15, screenHeight / 10, 25, RED);
+        DrawText("lives: ", screenWidth / 120, screenHeight / 10, 25, RED);
+    }
+    if (saucer.active)
+    {
+        DrawRectangle(saucer.position.x, saucer.position.y, saucer.size.x, saucer.size.y, BLUE);
+    }
 }
 
 void UpdateDrawFrame()
