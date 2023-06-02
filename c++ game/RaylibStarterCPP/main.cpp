@@ -47,6 +47,13 @@ typedef struct Saucer
     float rotation;
     Color color;
     bool active;
+    bool Spawnround;
+
+    Rectangle getrect()
+    {
+
+        return Rectangle{ position.x, position.y, size.x, size.y };
+    }
 };
 
 
@@ -120,10 +127,12 @@ void InitGame()
     bool correctRange = false;
 
 
-    saucer.position = { screenWidth / 8, screenHeight / 2 };
+    saucer.position = { screenWidth / 1, screenHeight / 2 };
     saucer.speed = { 0,0 };
     saucer.size = { 50,25 };
-    saucer.active = true;
+    saucer.rotation = 0;
+    saucer.active = false;
+    saucer.Spawnround = false;
     saucer.color = BLUE;
 
 
@@ -152,7 +161,7 @@ void InitGame()
     {
         enemshooting[i].position = { 0, 0 };
         enemshooting[i].speed = { 0, 0 };
-        enemshooting[i].radius = 2;
+        enemshooting[i].radius = 4;
         enemshooting[i].active = false;
         enemshooting[i].lifeSpawn = 0;
         enemshooting[i].color = RED;
@@ -264,7 +273,7 @@ void UpdateGame(void)
         player.position.y += player.speed.y;
 
 
-
+        
 
 
         if (player.position.x > screenWidth + shipHeight)
@@ -284,26 +293,36 @@ void UpdateGame(void)
             player.position.y = screenHeight + shipHeight;
         }
 
+        if (destroyedMeteorsCount == 2)
+        {
+            if (!saucer.Spawnround)
+            {
+                saucer.Spawnround = true;
+                saucer.active = true;
+            }
+        }
         if (saucer.active)
         {
-
+            saucer.rotation += 5;
+            srand((unsigned)time(NULL));
+            float a = 0.9;
             saucer.speed.x = 1;
             if (saucer.position.x > screenWidth + saucer.size.x)
             {
-                sauceraccelerate = GetRandomValue(-8, -12);
-                saucer.position.y = screenHeight / GetRandomValue(2, 10);
+                sauceraccelerate = GetRandomValue(-4, -8);
+                saucer.position.y = screenHeight * ((float)rand() / float((RAND_MAX)) * a);
             }
             else if (saucer.position.x < saucer.size.x * -5)
             {
-                sauceraccelerate = GetRandomValue(8, 12);
-                saucer.position.y = screenHeight / GetRandomValue(-2, 10);
+                sauceraccelerate = GetRandomValue(4, 8);
+                saucer.position.y = screenHeight * ((float)rand() / float((RAND_MAX)) * a);
             }
             saucer.position.x += saucer.speed.x * sauceraccelerate;
             for (int i = 0; i < maxEnemShooting; i++)
             {
                 if (enemshooting[i].active == false)
                 {
-                    enemshooting[i].position = { saucer.position.x , saucer.position.y };
+                    enemshooting[i].position = { saucer.position.x + 25, saucer.position.y + 20 };
                     enemshooting[i].active = true;
                     enemshooting[i].speed.x = 1.5 * sin(saucer.rotation * DEG2RAD) * acceleration;
                     enemshooting[i].speed.y = 1.5 * cos(saucer.rotation * DEG2RAD) * acceleration;
@@ -312,6 +331,8 @@ void UpdateGame(void)
                 }
             }
         }
+        
+       
 
 
 
@@ -353,23 +374,19 @@ void UpdateGame(void)
 
                 if (shooting[i].position.x > screenWidth + shooting[i].radius)
                 {
-                    shooting[i].active = false;
-                    shooting[i].lifeSpawn = 0;
+                    shooting[i].position.x = -shooting[i].radius;
                 }
                 else if (shooting[i].position.x < 0 - shooting[i].radius)
                 {
-                    shooting[i].active = false;
-                    shooting[i].lifeSpawn = 0;
+                    shooting[i].position.x = screenWidth + shooting[i].radius;
                 }
                 if (shooting[i].position.y > screenHeight + shooting[i].radius)
                 {
-                    shooting[i].active = false;
-                    shooting[i].lifeSpawn = 0;
+                    shooting[i].position.y = -shooting[i].radius;
                 }
                 else if (shooting[i].position.y < 0 - shooting[i].radius)
                 {
-                    shooting[i].active = false;
-                    shooting[i].lifeSpawn = 0;
+                    shooting[i].position.y = screenHeight + shooting[i].radius;
                 }
 
                 if (shooting[i].lifeSpawn >= 30)
@@ -392,26 +409,22 @@ void UpdateGame(void)
 
                 if (enemshooting[i].position.x > screenWidth + enemshooting[i].radius)
                 {
-                    enemshooting[i].active = false;
-                    enemshooting[i].lifeSpawn = 0;
+                    enemshooting[i].position.x = -enemshooting[i].radius;
                 }
                 else if (enemshooting[i].position.x < 0 - enemshooting[i].radius)
                 {
-                    shooting[i].active = false;
-                    shooting[i].lifeSpawn = 0;
+                    enemshooting[i].position.x = screenWidth + enemshooting[i].radius;
                 }
                 if (enemshooting[i].position.y > screenHeight + enemshooting[i].radius)
                 {
-                    shooting[i].active = false;
-                    shooting[i].lifeSpawn = 0;
+                    enemshooting[i].position.y = -enemshooting[i].radius;
                 }
                 else if (enemshooting[i].position.y < 0 - enemshooting[i].radius)
                 {
-                    enemshooting[i].active = false;
-                    enemshooting[i].lifeSpawn = 0;
+                    enemshooting[i].position.y = screenHeight + enemshooting[i].radius;
                 }
 
-                if (enemshooting[i].lifeSpawn >= 30)
+                if (enemshooting[i].lifeSpawn >= 20)
                 {
                     enemshooting[i].position = { 0, 0 };
                     enemshooting[i].speed = { 0, 0 };
@@ -507,6 +520,16 @@ void UpdateGame(void)
 
         if (player.active)
         {
+
+            for (int i = 0; i < maxEnemShooting; i++)
+            {
+               if (player.active && enemshooting[i].active && CheckCollisionCircles({ player.position.x, player.position.y }, player.nSize, enemshooting[i].position, enemshooting[i].radius))
+               {
+                player.active = false;
+               }
+            }
+
+
             for (int i = 0; i < maxMeteor; i++)
             {
                 if (player.active && meteor[i].active && CheckCollisionCircles({ player.position.x, player.position.y }, player.nSize, meteor[i].position, meteor[i].radius))
@@ -529,6 +552,9 @@ void UpdateGame(void)
                     player.active = false;
                 }
             }
+
+
+           
 
             for (int i = 0; i < maxShooting; i++)
             {
@@ -612,6 +638,17 @@ void UpdateGame(void)
                             b = maxSmallMeteor;
                         }
                     }
+                    /*for (int c = 0; c < maxEnemShooting; c++)
+                    {
+                        if (saucer.active && CheckCollisionCircleRec(shooting[i].position, shooting[i].radius, saucer.getrect()));
+                        {
+                            saucer.active = false;
+                            enemshooting[c].active = false;
+                        }
+                    }*/
+                  
+                    
+
                 }
             }
 
@@ -619,6 +656,7 @@ void UpdateGame(void)
         }
         else
         {
+        saucer.Spawnround = false;
             restart = true;
             lives -= 1;
             if (lives == 0)
@@ -771,6 +809,10 @@ void DrawGame()
     if (saucer.active)
     {
         DrawRectangle(saucer.position.x, saucer.position.y, saucer.size.x, saucer.size.y, BLUE);
+    }
+    else
+    {
+        DrawRectangle(saucer.position.x, saucer.position.y, saucer.size.x, saucer.size.y, Fade(RAYWHITE, 0.1));
     }
 }
 
